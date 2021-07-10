@@ -61,3 +61,6 @@ double determinante(int n, double a[][MAX])
    }
    return s;
 }
+
+
+
