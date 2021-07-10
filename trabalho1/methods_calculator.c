@@ -2,7 +2,6 @@
 #include <math.h>
 #include <stdbool.h>
 
-//gera matriz sub de ordem n-1, sem a linha 0 e a coluna c da matriz a
 void geraSubMatriz(int n, double a[][MAX], int c, double sub[][MAX])
 {
    for (int i = 1; i < n; i++)
@@ -15,7 +14,6 @@ void geraSubMatriz(int n, double a[][MAX], int c, double sub[][MAX])
       }
 }
 
-//reescreve a como sua transposta
 void transpoe(int n, double a[][MAX])
 {
    double aux;
@@ -27,14 +25,14 @@ void transpoe(int n, double a[][MAX])
          a[j][i] = aux;
       }
 }
-//reescreve a como a identidade de ordem n
+
 void id(int n, double a[][MAX])
 {
    for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
          a[i][j] = (i == j) ? 1 : 0;
 }
-//retorna o determinante da matriz, por laplace
+
 double determinante(int n, double a[][MAX])
 {
    double s = 0;
