@@ -1,6 +1,7 @@
 #include "read_print.h"
 #include <math.h>
 #include <stdbool.h>
+#include "matriz.h"
 
 
 bool temSubMatrizesNaoSingulares(int n, double a[][MAX])
@@ -225,7 +226,7 @@ bool cholesky(int n, double a[][MAX], double b[], double x[])
 
    sistemaTriangularInferior(n, l, b, y);
 
-   transpoe(n, l);
+   transposta(n, l);
    sistemaTriangularSuperior(n, l, y, x);
    return true;
 }
@@ -272,11 +273,11 @@ bool matrizInversa(int n, double a[][MAX], double x[][MAX])
    if (!temSubMatrizesNaoSingulares(n, a))
       return false;
 
-   id(n, e);
+   identidade(n, e);
    for (int i = 0; i < n; i++)
       (op == 0) ? decomposicaoLU(n, a, e[i], x[i]) : gaussCompacto(n, a, e[i], x[i]);
 
-   transpoe(n, x);
+   transposta(n, x);
    return true;
 }
 
