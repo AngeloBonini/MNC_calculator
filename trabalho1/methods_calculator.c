@@ -2,10 +2,6 @@
 #include <math.h>
 #include <stdbool.h>
 
-//a[][]: coeficientes
-//b[]  : termos independentes
-//x[]  : solução
-
 //gera matriz sub de ordem n-1, sem a linha 0 e a coluna c da matriz a
 void geraSubMatriz(int n, double a[][MAX], int c, double sub[][MAX])
 {
@@ -18,6 +14,7 @@ void geraSubMatriz(int n, double a[][MAX], int c, double sub[][MAX])
             k--;
       }
 }
+
 //reescreve a como sua transposta
 void transpoe(int n, double a[][MAX])
 {
@@ -48,14 +45,14 @@ double determinante(int n, double a[][MAX])
       double sub[MAX][MAX];
       for (int j = 0; j < n; j++)
          if (a[0][j] != 0)
-         { //para cada elemento da linha 0 (a[0][j])
+         {
             geraSubMatriz(n, a, j, sub);
             s += a[0][j] * pow(-1, j) * determinante(n - 1, sub);
          }
    }
    return s;
 }
-//retorna true se todas as submatrizes principais têm determinante diferente de 0
+
 bool temSubMatrizesNaoSingulares(int n, double a[][MAX])
 {
    for (int i = 1; i <= n; i++)
@@ -63,7 +60,7 @@ bool temSubMatrizesNaoSingulares(int n, double a[][MAX])
          return false;
    return true;
 }
-//retorna true se todas as submatrizes principais têm determinante maior que 0
+
 bool ehDefPositiva(int n, double a[][MAX])
 {
    for (int i = 1; i <= n; i++)
@@ -131,7 +128,7 @@ bool criterioSassenfeld(int n, double a[][MAX])
    }
    return true;
 }
-//retorna a norma infinita do vetor
+
 double normaInf(int n, double v[])
 {
    double max = 0;
@@ -140,7 +137,7 @@ double normaInf(int n, double v[])
          max = abs(v[i]);
    return max;
 }
-//retorna um vetor de ordem n correspondente a v1-v2 (elemento a elemento)
+
 double *diferencaVet(int n, double v1[], double v2[])
 {
    double *v = (double *)malloc(sizeof(double) * n);
@@ -179,17 +176,17 @@ bool sistemaTriangularInferior(int n, double a[][MAX], double b[], double x[])
    }
    return true;
 }
-//métodos diretos
+
 bool decomposicaoLU(int n, double a[][MAX], double b[], double x[])
 {
    double u[MAX][MAX], l[MAX][MAX], y[MAX], s;
 
    if (!temSubMatrizesNaoSingulares(n, a))
-      return false; //método não converge
+      return false;
 
    for (int p = 0; p < n; p++)
    {
-      //calcula a linha p de U
+
       for (int j = p; j < n; j++)
       {
          s = 0;
@@ -198,7 +195,7 @@ bool decomposicaoLU(int n, double a[][MAX], double b[], double x[])
 
          u[p][j] = a[p][j] - s;
       }
-      //calcula a coluna p de L
+
       for (int i = p; i < n; i++)
       {
          s = 0;
@@ -208,10 +205,9 @@ bool decomposicaoLU(int n, double a[][MAX], double b[], double x[])
          l[i][p] = (a[i][p] - s) / u[p][p];
       }
    }
-   // impMatriz(n, l);
-   // impMatriz(n, u);
-   sistemaTriangularInferior(n, l, b, y); //L.y = b
-   sistemaTriangularSuperior(n, u, y, x); //U.x = y
+
+   sistemaTriangularInferior(n, l, b, y);
+   sistemaTriangularSuperior(n, u, y, x);
    return true;
 }
 bool gaussCompacto(int n, double a[][MAX], double b[], double x[])
@@ -219,11 +215,11 @@ bool gaussCompacto(int n, double a[][MAX], double b[], double x[])
    double u[MAX][MAX], l[MAX][MAX], bL[MAX], s;
 
    if (!temSubMatrizesNaoSingulares(n, a))
-      return false; //método não converge
+      return false;
 
    for (int p = 0; p < n; p++)
    {
-      //calcula a linha p de U
+
       for (int j = p; j < n; j++)
       {
          s = 0;
@@ -233,15 +229,11 @@ bool gaussCompacto(int n, double a[][MAX], double b[], double x[])
          u[p][j] = a[p][j] - s;
       }
 
-      //calcula a linha p de bL
       s = 0;
       for (int k = 0; k < p; k++)
-         s += l[p][k] * bL[k]; //bL[k] é o u[k][n], que não foi gerado
-      //bL[p] é o u[p][n], que não foi gerado
-      //b[p] é o a[p][n], que não foi gerado
+         s += l[p][k] * bL[k];
       bL[p] = b[p] - s;
 
-      //calcula a coluna p de L
       for (int i = p; i < n; i++)
       {
          s = 0;
@@ -251,9 +243,7 @@ bool gaussCompacto(int n, double a[][MAX], double b[], double x[])
          l[i][p] = (a[i][p] - s) / u[p][p];
       }
    }
-   // impMatriz(n, l);
-   // impMatriz(n, u);
-   // impVetoror(n, bL);
+
    sistemaTriangularSuperior(n, u, bL, x); //U.x = bL
    return true;
 }
@@ -262,18 +252,17 @@ bool cholesky(int n, double a[][MAX], double b[], double x[])
    double l[MAX][MAX], y[MAX], s;
 
    if (!ehSimetrica(n, a) || !ehDefPositiva(n, a))
-      return false; //método não converge
+      return false;
 
    for (int j = 0; j < n; j++)
    {
-      //calcula o elemento da diagonal
+
       s = 0;
       for (int k = 0; k < j; k++)
          s += pow(l[j][k], 2);
 
       l[j][j] = sqrt(a[j][j] - s);
 
-      //calcula os elementos abaixo da diagonal
       for (int i = j + 1; i < n; i++)
       {
          s = 0;
@@ -283,9 +272,9 @@ bool cholesky(int n, double a[][MAX], double b[], double x[])
          l[i][j] = (a[i][j] - s) / l[j][j];
       }
    }
-   // impMatriz(n, l);
+
    sistemaTriangularInferior(n, l, b, y);
-   // impVetor(n, y);
+
    transpoe(n, l);
    sistemaTriangularSuperior(n, l, y, x);
    return true;
@@ -297,25 +286,20 @@ bool gaussJordan(int n, double a[][MAX], double b[], double x[])
    copiaVet(n, b, bL);
 
    if (!temSubMatrizesNaoSingulares(n, a))
-      return false; //método não converge
+      return false;
 
    for (int k = 0; k < n; k++)
    {
       for (int i = 0; i < n; i++)
          if (i != k)
-         { //para cada linha i diferente da linha do pivô (k)
-            //razão entre o elemento que deve ser zerado e o pivô
+         {
             m = aL[i][k] / aL[k][k];
 
-            //recalcula toda linha i
             for (int j = 0; j < n; j++)
                aL[i][j] -= m * aL[k][j];
 
-            //última coluna da matriz ampliada
             bL[i] -= m * bL[k];
          }
-      // impMatriz(n, aL);
-      // impVetor(n, bL);
    }
 
    for (int i = 0; i < n; i++)
@@ -336,7 +320,7 @@ bool matrizInversa(int n, double a[][MAX], double x[][MAX])
    printf("\n");
 
    if (!temSubMatrizesNaoSingulares(n, a))
-      return false; //sistemas não convergem
+      return false;
 
    id(n, e);
    for (int i = 0; i < n; i++)
@@ -346,11 +330,10 @@ bool matrizInversa(int n, double a[][MAX], double x[][MAX])
    return true;
 }
 
-//métodos iterativos
 bool jacobi(int n, double a[][MAX], double b[], double e, double x_ant[], int maxIte, double x[], int *ite)
 {
    if (!diagPrincipalNaoNula(n, a) || determinante(n, a) == 0 || (!criterioLinhas(n, a) && !criterioColunas(n, a)))
-      return false; //método não converge
+      return false;
 
    double *v, s;
    for (*ite = 1; *ite <= maxIte; (*ite)++)
@@ -371,13 +354,13 @@ bool jacobi(int n, double a[][MAX], double b[], double e, double x_ant[], int ma
 
       copiaVet(n, x, x_ant);
    }
-   (*ite)--; //estourou número máximo de iterações
+   (*ite)--;
    return true;
 }
 bool gaussSeidel(int n, double a[][MAX], double b[], double e, double x_ant[], int maxIte, double x[], int *ite)
 {
    if (!diagPrincipalNaoNula(n, a) || determinante(n, a) == 0 || (!criterioLinhas(n, a) && !criterioSassenfeld(n, a)))
-      return false; //método não converge
+      return false;
 
    double *v, s, x_rec[MAX];
 
@@ -392,7 +375,7 @@ bool gaussSeidel(int n, double a[][MAX], double b[], double e, double x_ant[], i
                s += a[i][j] * x_rec[j];
 
          x[i] = (b[i] - s) / a[i][i];
-         x_rec[i] = x[i]; //atualiza x mais recente
+         x_rec[i] = x[i];
       }
 
       v = diferencaVet(n, x, x_ant);
@@ -401,7 +384,7 @@ bool gaussSeidel(int n, double a[][MAX], double b[], double e, double x_ant[], i
 
       copiaVet(n, x, x_ant);
    }
-   (*ite)--; //estourou número máximo de iterações
+   (*ite)--;
    return true;
 }
 
