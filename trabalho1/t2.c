@@ -4,6 +4,7 @@
 //a[][]: coeficientes
 //b[]  : termos independentes
 //x[]  : solução
+//niih
 
 //gera matriz sub de ordem n-1, sem a linha 0 e a coluna c da matriz a
 void geraSubMatriz(int n, double a[][MAX], int c, double sub[][MAX]) {
