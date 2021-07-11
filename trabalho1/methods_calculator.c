@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "matriz.h"
 #include "testes_matrizes.h"
+#include "norma_inferior.h"
 
 
 
@@ -41,14 +42,7 @@ bool criterioSassenfeld(int n, double a[][MAX])
    return true;
 }
 
-double normaInf(int n, double v[])
-{
-   double max = 0;
-   for (int i = 0; i < n; i++)
-      if (abs(v[i]) > max)
-         max = abs(v[i]);
-   return max;
-}
+
 
 double *diferencaVet(int n, double v1[], double v2[])
 {
