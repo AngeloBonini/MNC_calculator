@@ -2,39 +2,10 @@
 #include <math.h>
 #include <stdbool.h>
 #include "matriz.h"
+#include "testes_matrizes.h"
 
 
-bool temSubMatrizesNaoSingulares(int n, double a[][MAX])
-{
-   for (int i = 1; i <= n; i++)
-      if (determinante(i, a) == 0)
-         return false;
-   return true;
-}
 
-bool ehDefPositiva(int n, double a[][MAX])
-{
-   for (int i = 1; i <= n; i++)
-      if (determinante(i, a) <= 0)
-         return false;
-   return true;
-}
-bool ehSimetrica(int n, double a[][MAX])
-{
-   for (int i = 0; i < n; i++)
-      for (int j = i + 1; j < n; j++)
-         if (a[i][j] != a[j][i])
-            return false;
-   return true;
-}
-
-bool diagPrincipalNaoNula(int n, double a[][MAX])
-{
-   for (int i = 0; i < n; i++)
-      if (a[i][i] == 0)
-         return false;
-   return true;
-}
 bool criterioLinhas(int n, double a[][MAX])
 {
    for (int i = 0; i < n; i++)
@@ -192,7 +163,7 @@ bool cholesky(int n, double a[][MAX], double b[], double x[])
 {
    double l[MAX][MAX], y[MAX], s;
 
-   if (!ehSimetrica(n, a) || !ehDefPositiva(n, a))
+   if (!checaSimetria(n, a) || !checaPositivaDefinida(n, a))
       return false;
 
    for (int j = 0; j < n; j++)
@@ -273,7 +244,7 @@ bool matrizInversa(int n, double a[][MAX], double x[][MAX])
 
 bool jacobi(int n, double a[][MAX], double b[], double e, double x_ant[], int maxIte, double x[], int *ite)
 {
-   if (!diagPrincipalNaoNula(n, a) || determinante(n, a) == 0 || (!criterioLinhas(n, a) && !criterioColunas(n, a)))
+   if (!checaDiagonalPrincipal(n, a) || determinante(n, a) == 0 || (!criterioLinhas(n, a) && !criterioColunas(n, a)))
       return false;
 
    double *v, s;
@@ -300,7 +271,7 @@ bool jacobi(int n, double a[][MAX], double b[], double e, double x_ant[], int ma
 }
 bool gaussSeidel(int n, double a[][MAX], double b[], double e, double x_ant[], int maxIte, double x[], int *ite)
 {
-   if (!diagPrincipalNaoNula(n, a) || determinante(n, a) == 0 || (!criterioLinhas(n, a) && !criterioSassenfeld(n, a)))
+   if (!checaDiagonalPrincipal(n, a) || determinante(n, a) == 0 || (!criterioLinhas(n, a) && !criterioSassenfeld(n, a)))
       return false;
 
    double *v, s, x_rec[MAX];
