@@ -13,7 +13,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-
 bool matrizInversa(int n, double a[][MAX], double x[][MAX])
 {
    int op;
