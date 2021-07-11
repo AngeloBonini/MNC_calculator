@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdbool.h>
 #define MAX 100
-#define abs_(n) ((n) > 0 ? (n) : -(n));
+#define abs_gaussSeidel(n) ((n) > 0 ? (n) : -(n))
 
 bool criterioSassenfeld(int n, double a[][MAX]){
    double beta[MAX], max = 0;
@@ -29,7 +29,7 @@ bool criterioLinhas(int n, double a[][MAX]){
             return false;
    return true;
 };
-double *diferencaVet(int n, double v1[], double v2[]){
+double *diferencaVet_gaussSeidel(int n, double v1[], double v2[]){
    double *v = (double *)malloc(sizeof(double) * n);
    for (int i = 0; i < n; i++)
       v[i] = v1[i] - v2[i];
@@ -83,8 +83,8 @@ double normaInf_gaussSeidel(int n, double v[])
 {
    double max = 0;
    for (int i = 0; i < n; i++)
-      if (abs_(v[i]) > max)
-         max = abs_(v[i]);
+      if (abs_gaussSeidel(v[i]) > max)
+         max = abs_gaussSeidel(v[i]);
    return max;
 }
 bool gaussSeidel(int n, double a[][MAX], double b[], double e, double x_ant[], int maxIte, double x[], int *ite)
@@ -108,7 +108,7 @@ bool gaussSeidel(int n, double a[][MAX], double b[], double e, double x_ant[], i
          x_rec[i] = x[i];
       }
 
-      v = diferencaVet(n, x, x_ant);
+      v = diferencaVet_gaussSeidel(n, x, x_ant);
       if (normaInf_gaussSeidel(n, v) / normaInf_gaussSeidel(n, x) < e)
          return true;
 

@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdio.h>
+#include <stdbool.h>
 #define MAX 100
 
 void subMatriz_gaussCompacto(int ordem, double a[][MAX], int coluna, double sub[][MAX])
@@ -32,7 +33,7 @@ double determinante_gaussCompacto(int ordem, double a[][MAX])
    return s;
 }
 
-bool temSubMatrizesNaoSingulares(int ordem, double matriz[][MAX])
+bool temSubMatrizesNaoSingulares_gaussCompacto(int ordem, double matriz[][MAX])
 {
    for (int i = 1; i <= ordem; i++)
       if (determinante_gaussCompacto(i, matriz) == 0)
@@ -59,7 +60,7 @@ bool sistemaTriangularSuperior_gaussCompacto(int n, double a[][MAX], double b[],
 bool gaussCompacto(int n, double a[][MAX], double b[], double x[]){
    double u[MAX][MAX], l[MAX][MAX], bL[MAX], s;
 
-   if (!temSubMatrizesNaoSingulares(n, a))
+   if (!temSubMatrizesNaoSingulares_gaussCompacto(n, a))
       return false;
 
    for (int p = 0; p < n; p++)

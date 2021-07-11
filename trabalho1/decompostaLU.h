@@ -54,7 +54,7 @@ bool sistemaTriangularSuperior_LU(int n, double a[][MAX], double b[], double x[]
    }
    return true;
 }
-bool sistemaTriangularInferior(int n, double a[][MAX], double b[], double x[])
+bool sistemaTriangularInferior_LU(int n, double a[][MAX], double b[], double x[])
 {
    if (determinante_LU(n, a) == 0)
       return false;
@@ -99,7 +99,7 @@ bool decomposicaoLU(int n, double a[][MAX], double b[], double x[])
       }
    }
 
-   sistemaTriangularInferior(n, l, b, y);
+   sistemaTriangularInferior_LU(n, l, b, y);
    sistemaTriangularSuperior_LU(n, u, y, x);
    return true;
 }

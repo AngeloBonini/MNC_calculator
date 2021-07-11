@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdio.h>
+#include <stdbool.h>
 #define MAX 100
 
 void subMatriz_TriangularInferior(int ordem, double a[][MAX], int coluna, double sub[][MAX])

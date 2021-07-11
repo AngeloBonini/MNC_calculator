@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include<stdbool.h>
 #define MAX 100
-#define abs_(n) ((n) > 0 ? (n) : -(n))
+#define abs_jacobi(n) ((n) > 0 ? (n) : -(n))
 
 void subMatriz_jacobi(int ordem, double a[][MAX], int coluna, double sub[][MAX])
 {
@@ -39,7 +39,7 @@ void copiaVetor_jacobi(int ordem, double a[], double copia[])
       copia[i] = a[i];
 }
 
-double *diferencaVet(int n, double v1[], double v2[]){
+double *diferencaVet_jacobi(int n, double v1[], double v2[]){
    double *v = (double *)malloc(sizeof(double) * n);
    for (int i = 0; i < n; i++)
       v[i] = v1[i] - v2[i];
@@ -72,8 +72,8 @@ double normaInf(int n, double v[])
 {
    double max = 0;
    for (int i = 0; i < n; i++)
-      if (abs_(v[i]) > max)
-         max = abs_(v[i]);
+      if (abs_jacobi(v[i]) > max)
+         max = abs_jacobi(v[i]);
    return max;
 }
 
@@ -95,7 +95,7 @@ bool jacobi(int n, double a[][MAX], double b[], double e, double x_ant[], int ma
          x[i] = (b[i] - s) / a[i][i];
       }
 
-      v = diferencaVet(n, x, x_ant);
+      v = diferencaVet_jacobi(n, x, x_ant);
       if (normaInf(n, v) / normaInf(n, x) < e)
          return true;
 

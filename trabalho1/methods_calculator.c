@@ -8,6 +8,7 @@
 #include "testes_matrizes.h"
 #include "sistemaTriangularSuperior.h"
 #include "sistemaTriangularInferior.h"
+#include "decompostaLU.h"
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>

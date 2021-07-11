@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
+#include <stdbool.h>
 #define MAX 100
 
 void subMatriz_cholesky(int ordem, double a[][MAX], int coluna, double sub[][MAX])
