@@ -34,7 +34,7 @@ double determinante_TriangularSuperior(int ordem, double a[][MAX])
 
 bool sistemaTriangularSuperior(int n, double a[][MAX], double b[], double x[])
 {
-   if (determinante(n, a) == 0)
+   if (determinante_TriangularSuperior(n, a) == 0)
       return false;
 
    for (int i = n - 1; i >= 0; i--)
