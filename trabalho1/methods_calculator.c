@@ -1,7 +1,20 @@
 #include "read_print.h"
-#include <math.h>
 #include <stdbool.h>
+#include <locale.h>
+#include <math.h>
+#include <conio.h>
+#include <windows.h>
+#include <time.h>
 
+short posX = 53, posY = 6;
+ 
+void moveXY(int x, int y, char t[10]){
+   setlocale(LC_ALL, "Portuguese");
+   HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+   COORD position = {x,y};
+   SetConsoleCursorPosition(hStdout, position);
+   printf("%s", t);   
+}
 
 void geraSubMatriz(int n, double a[][MAX], int c, double sub[][MAX])
 {
