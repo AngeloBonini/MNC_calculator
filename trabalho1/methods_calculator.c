@@ -77,7 +77,7 @@ int main()
 
    do
    {
-      system("clear");
+      system("cls");
       op = menu();
 
       printf("Ordem da matriz: ");
