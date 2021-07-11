@@ -6,27 +6,25 @@
 #include "norma_inferior.h"
 #include "sistemaTriangularSuperior.h"
 #include "sistemaTriangularInferior.h"
+#include "decompostaLU.h"
 
 
 
-bool criterioLinhas(int n, double a[][MAX])
-{
+bool criterioLinhas(int n, double a[][MAX]){
    for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
          if (j != i && abs(a[i][j] / a[i][i]) >= 1)
             return false;
    return true;
-}
-bool criterioColunas(int n, double a[][MAX])
-{
+};
+bool criterioColunas(int n, double a[][MAX]){
    for (int j = 0; j < n; j++)
       for (int i = 0; i < n; i++)
          if (i != j && abs(a[i][j] / a[j][j]) >= 1)
             return false;
    return true;
-}
-bool criterioSassenfeld(int n, double a[][MAX])
-{
+};
+bool criterioSassenfeld(int n, double a[][MAX]){
    double beta[MAX], max = 0;
 
    for (int i = 0; i < n; i++)
@@ -42,56 +40,20 @@ bool criterioSassenfeld(int n, double a[][MAX])
          return false;
    }
    return true;
-}
+};
 
 
 
-double *diferencaVet(int n, double v1[], double v2[])
-{
+double *diferencaVet(int n, double v1[], double v2[]){
    double *v = (double *)malloc(sizeof(double) * n);
    for (int i = 0; i < n; i++)
       v[i] = v1[i] - v2[i];
    return v;
-}
+};
 
 
 
-
-bool decomposicaoLU(int n, double a[][MAX], double b[], double x[])
-{
-   double u[MAX][MAX], l[MAX][MAX], y[MAX], s;
-
-   if (!temSubMatrizesNaoSingulares(n, a))
-      return false;
-
-   for (int p = 0; p < n; p++)
-   {
-
-      for (int j = p; j < n; j++)
-      {
-         s = 0;
-         for (int k = 0; k < p; k++)
-            s += l[p][k] * u[k][j];
-
-         u[p][j] = a[p][j] - s;
-      }
-
-      for (int i = p; i < n; i++)
-      {
-         s = 0;
-         for (int k = 0; k < p; k++)
-            s += l[i][k] * u[k][p];
-
-         l[i][p] = (a[i][p] - s) / u[p][p];
-      }
-   }
-
-   sistemaTriangularInferior(n, l, b, y);
-   sistemaTriangularSuperior(n, u, y, x);
-   return true;
-}
-bool gaussCompacto(int n, double a[][MAX], double b[], double x[])
-{
+bool gaussCompacto(int n, double a[][MAX], double b[], double x[]){
    double u[MAX][MAX], l[MAX][MAX], bL[MAX], s;
 
    if (!temSubMatrizesNaoSingulares(n, a))
@@ -126,9 +88,8 @@ bool gaussCompacto(int n, double a[][MAX], double b[], double x[])
 
    sistemaTriangularSuperior(n, u, bL, x); //U.x = bL
    return true;
-}
-bool cholesky(int n, double a[][MAX], double b[], double x[])
-{
+};
+bool cholesky(int n, double a[][MAX], double b[], double x[]){
    double l[MAX][MAX], y[MAX], s;
 
    if (!checaSimetria(n, a) || !checaPositivaDefinida(n, a))
@@ -158,9 +119,8 @@ bool cholesky(int n, double a[][MAX], double b[], double x[])
    transposta(n, l);
    sistemaTriangularSuperior(n, l, y, x);
    return true;
-}
-bool gaussJordan(int n, double a[][MAX], double b[], double x[])
-{
+};
+bool gaussJordan(int n, double a[][MAX], double b[], double x[]){
    double aL[MAX][MAX], bL[MAX], m;
    copy2d_Array(n, a, aL);
    copyArray(n, b, bL);
