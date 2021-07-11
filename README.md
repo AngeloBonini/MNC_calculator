@@ -1,6 +1,10 @@
 # MNC_calculator
 numerical methods calculator witten in C, all methods are listed inside the readme file
 
+### Authors: [Angelo Bonini](https://github.com/AngeloBonini), [Lucas Massarico](https://github.com/lucasmassarico), Caio Regal.
+
+Please Star it :smile:
+
 
 | Method       | Params                 | Type      |
 | ------------- |:---------------------:| ----------:|
