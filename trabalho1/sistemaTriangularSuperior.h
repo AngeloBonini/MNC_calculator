@@ -3,7 +3,7 @@
 #define MAX 100
 
 
-void su_bMatriz_(int ordem, double a[][MAX], int coluna, double sub[][MAX])
+void subMatriz_TriangularSuperior(int ordem, double a[][MAX], int coluna, double sub[][MAX])
 {
    for (int i = 1; i < ordem; i++)
       for (int j = 0, k = 0; j < ordem; j++, k++)
@@ -14,7 +14,7 @@ void su_bMatriz_(int ordem, double a[][MAX], int coluna, double sub[][MAX])
             k--;
       }
 }
-double de_terminante_(int ordem, double a[][MAX])
+double determinante_TriangularSuperior(int ordem, double a[][MAX])
 {
    double s = 0;
    if (ordem == 1)
@@ -25,8 +25,8 @@ double de_terminante_(int ordem, double a[][MAX])
       for (int j = 0; j < ordem; j++)
          if (a[0][j] != 0)
          {
-            su_bMatriz_(ordem, a, j, sub);
-            s += a[0][j] * pow(-1, j) * de_terminante_(ordem - 1, sub);
+            subMatriz_TriangularSuperior(ordem, a, j, sub);
+            s += a[0][j] * pow(-1, j) * determinante_TriangularSuperior(ordem - 1, sub);
          }
    }
    return s;
