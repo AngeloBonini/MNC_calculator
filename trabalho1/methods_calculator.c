@@ -1,55 +1,41 @@
 #include "read_print.h"
-#include <math.h>
-#include <stdbool.h>
+#include "cholesky.h"
+#include "gauss_compacto.h"
+#include "gauss_jordan.h"
+#include "gauss_seidel.h"
+#include "jacobi.h"
 #include "matriz.h"
 #include "testes_matrizes.h"
-#include "norma_inferior.h"
 #include "sistemaTriangularSuperior.h"
 #include "sistemaTriangularInferior.h"
-#include "decompostaLU.h"
+#include <math.h>
+#include <stdbool.h>
+#include <stdio.h>
 
 
+bool matrizInversa(int n, double a[][MAX], double x[][MAX])
+{
+   int op;
+   double e[MAX][MAX];
 
-bool criterioLinhas(int n, double a[][MAX]){
-   for (int i = 0; i < n; i++)
-      for (int j = 0; j < n; j++)
-         if (j != i && abs(a[i][j] / a[i][i]) >= 1)
-            return false;
-   return true;
-};
-bool criterioColunas(int n, double a[][MAX]){
-   for (int j = 0; j < n; j++)
-      for (int i = 0; i < n; i++)
-         if (i != j && abs(a[i][j] / a[j][j]) >= 1)
-            return false;
-   return true;
-};
-bool criterioSassenfeld(int n, double a[][MAX]){
-   double beta[MAX], max = 0;
-
-   for (int i = 0; i < n; i++)
+   printf("\n[0] Decomposição LU\n[1] Gauss Compacto\n");
+   do
    {
-      beta[i] = 0;
-      for (int j = 0; j < i - 1; j++)
-         beta[i] += abs(a[i][j] / a[i][i]) * beta[j];
+      printf("Determinar a inversa por: ");
+      scanf("%d", &op);
+   } while (op != 0 && op != 1);
+   printf("\n");
 
-      for (int j = i + 1; j < n; j++)
-         beta[i] += abs(a[i][j] / a[i][i]);
+   if (!temSubMatrizesNaoSingulares(n, a))
+      return false;
 
-      if (beta[i] >= 1)
-         return false;
-   }
-   return true;
-};
-
-
-
-double *diferencaVet(int n, double v1[], double v2[]){
-   double *v = (double *)malloc(sizeof(double) * n);
+   identidade(n, e);
    for (int i = 0; i < n; i++)
-      v[i] = v1[i] - v2[i];
-   return v;
-};
+      (op == 0) ? decomposicaoLU(n, a, e[i], x[i]) : gaussCompacto(n, a, e[i], x[i]);
+
+   transposta(n, x);
+   return true;
+}
 
 
 int menu()
