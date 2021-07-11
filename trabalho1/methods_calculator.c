@@ -27,17 +27,7 @@ bool ehSimetrica(int n, double a[][MAX])
             return false;
    return true;
 }
-void copiaMatriz(int n, double a[][MAX], double copia[][MAX])
-{
-   for (int i = 0; i < n; i++)
-      for (int j = 0; j < n; j++)
-         copia[i][j] = a[i][j];
-}
-void copiaVet(int n, double a[], double copia[])
-{
-   for (int i = 0; i < n; i++)
-      copia[i] = a[i];
-}
+
 bool diagPrincipalNaoNula(int n, double a[][MAX])
 {
    for (int i = 0; i < n; i++)
@@ -233,8 +223,8 @@ bool cholesky(int n, double a[][MAX], double b[], double x[])
 bool gaussJordan(int n, double a[][MAX], double b[], double x[])
 {
    double aL[MAX][MAX], bL[MAX], m;
-   copiaMatriz(n, a, aL);
-   copiaVet(n, b, bL);
+   copy2d_Array(n, a, aL);
+   copyArray(n, b, bL);
 
    if (!temSubMatrizesNaoSingulares(n, a))
       return false;
@@ -303,7 +293,7 @@ bool jacobi(int n, double a[][MAX], double b[], double e, double x_ant[], int ma
       if (normaInf(n, v) / normaInf(n, x) < e)
          return true;
 
-      copiaVet(n, x, x_ant);
+      copyArray(n, x, x_ant);
    }
    (*ite)--;
    return true;
@@ -315,7 +305,7 @@ bool gaussSeidel(int n, double a[][MAX], double b[], double e, double x_ant[], i
 
    double *v, s, x_rec[MAX];
 
-   copiaVet(n, x_ant, x_rec);
+   copyArray(n, x_ant, x_rec);
    for (*ite = 1; *ite <= maxIte; (*ite)++)
    {
       for (int i = 0; i < n; i++)
@@ -333,7 +323,7 @@ bool gaussSeidel(int n, double a[][MAX], double b[], double e, double x_ant[], i
       if (normaInf(n, v) / normaInf(n, x) < e)
          return true;
 
-      copiaVet(n, x, x_ant);
+      copyArray(n, x, x_ant);
    }
    (*ite)--;
    return true;
