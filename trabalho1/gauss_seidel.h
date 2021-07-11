@@ -84,7 +84,7 @@ double normaInf_gaussSeidel(int n, double v[])
    double max = 0;
    for (int i = 0; i < n; i++)
       if (abs_(v[i]) > max)
-         max = abs(v[i]);
+         max = abs_(v[i]);
    return max;
 }
 bool gaussSeidel(int n, double a[][MAX], double b[], double e, double x_ant[], int maxIte, double x[], int *ite)
