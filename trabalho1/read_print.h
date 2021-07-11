@@ -37,3 +37,16 @@ void read2d_array(int n, double a[][MAX])
       for (int j = 0; j < n; j++)
          scanf("%lf", &a[i][j]);
 }
+
+void copy2d_Array(int ordem, double a[][MAX], double copia[][MAX])
+{
+   for (int i = 0; i < ordem; i++)
+      for (int j = 0; j < ordem; j++)
+         copia[i][j] = a[i][j];
+}
+
+void copyArray(int ordem, double a[], double copia[])
+{
+   for (int i = 0; i < ordem; i++)
+      copia[i] = a[i];
+}
