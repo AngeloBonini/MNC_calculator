@@ -468,19 +468,23 @@ int main() {
                 }
                
                 if (posY == 11){
-                    system("cls");
-                    printf("\nTermos independentes:\n");
-                     leVetor(n, b);
-                    ok = sistemaTriangularInferior(n, a, b, x);
-                    if (ok) {
-                        printf("\nO vetor solução é:\n");
-                        impVetor(n, x);
-                     } else
-                        printf("\nO método não converge!\n");
-                     do{
-                        pronto = getch();
-                     }while (pronto != 13);
-                    system ("cls");              
+                  system("cls");
+                  printf("\nOrdem da matriz: ");
+                  scanf("%d", &n);
+                  printf("\nCoeficientes da matriz %dx%d:\n", n, n);
+                  leMatriz(n, a);
+                  printf("\nTermos independentes:\n");
+                  leVetor(n, b);
+                  ok = sistemaTriangularInferior(n, a, b, x);
+                  if (ok) {
+                     printf("\nO vetor solução é:\n");
+                     impVetor(n, x);
+                  } else
+                     printf("\nO método não converge!\n");
+                  do{
+                     pronto = getch();
+                  }while (pronto != 13);
+                  system ("cls");              
                 }
                 
                 if (posY == 15){
