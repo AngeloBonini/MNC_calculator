@@ -1,10 +1,19 @@
 #include "header.h"
+#include <locale.h>
 #include <math.h>
+#include <conio.h>
+#include <windows.h>
+#include <time.h>
 
-//a[][]: coeficientes
-//b[]  : termos independentes
-//x[]  : solução
-//niih
+short posX = 53, posY = 6;
+ 
+void moveXY(int x, int y, char t[10])
+{
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD position = {x,y};
+    SetConsoleCursorPosition(hStdout, position);
+    printf("%s", t);   
+}
 
 //gera matriz sub de ordem n-1, sem a linha 0 e a coluna c da matriz a
 void geraSubMatriz(int n, double a[][MAX], int c, double sub[][MAX]) {
@@ -121,7 +130,7 @@ double normaInf(int n, double v[]) {
          max = abs(v[i]);
    return max;
 }
-//retorna um vetor de ordem n correspondente a v1-v2 (elemento a elemento)
+
 double *diferencaVet(int n, double v1[], double v2[]) {
    double *v = (double *)malloc(sizeof(double) * n);
    for (int i = 0; i < n; i++)
@@ -155,15 +164,14 @@ bool sistemaTriangularInferior(int n, double a[][MAX], double b[], double x[]) {
    }
    return true;
 }
-//métodos diretos
+
 bool decomposicaoLU(int n, double a[][MAX], double b[], double x[]) {
    double u[MAX][MAX], l[MAX][MAX], y[MAX], s;
 
    if (!temSubMatrizesNaoSingulares(n, a))
-      return false; //método não converge
+      return false; //não converge
 
    for (int p = 0; p < n; p++) {
-      //calcula a linha p de U
       for (int j = p; j < n; j++) {
          s = 0;
          for (int k = 0; k < p; k++)
@@ -171,7 +179,6 @@ bool decomposicaoLU(int n, double a[][MAX], double b[], double x[]) {
 
          u[p][j] = a[p][j] - s;
       }
-      //calcula a coluna p de L
       for (int i = p; i < n; i++) {
          s = 0;
          for (int k = 0; k < p; k++)
@@ -180,20 +187,17 @@ bool decomposicaoLU(int n, double a[][MAX], double b[], double x[]) {
          l[i][p] = (a[i][p] - s) / u[p][p];
       }
    }
-   // impMatriz(n, l);
-   // impMatriz(n, u);
-   sistemaTriangularInferior(n, l, b, y); //L.y = b
-   sistemaTriangularSuperior(n, u, y, x); //U.x = y
+   sistemaTriangularInferior(n, l, b, y);
+   sistemaTriangularSuperior(n, u, y, x);
    return true;
 }
 bool gaussCompacto(int n, double a[][MAX], double b[], double x[]) {
    double u[MAX][MAX], l[MAX][MAX], bL[MAX], s;
 
    if (!temSubMatrizesNaoSingulares(n, a))
-      return false; //método não converge
+      return false; //não converge
 
    for (int p = 0; p < n; p++) {
-      //calcula a linha p de U
       for (int j = p; j < n; j++) {
          s = 0;
          for (int k = 0; k < p; k++)
@@ -202,15 +206,11 @@ bool gaussCompacto(int n, double a[][MAX], double b[], double x[]) {
          u[p][j] = a[p][j] - s;
       }
 
-      //calcula a linha p de bL
       s = 0;
       for (int k = 0; k < p; k++)
-         s += l[p][k] * bL[k]; //bL[k] é o u[k][n], que não foi gerado
-      //bL[p] é o u[p][n], que não foi gerado
-      //b[p] é o a[p][n], que não foi gerado
+         s += l[p][k] * bL[k]; 
       bL[p] = b[p] - s;
 
-      //calcula a coluna p de L
       for (int i = p; i < n; i++) {
          s = 0;
          for (int k = 0; k < p; k++)
@@ -219,17 +219,15 @@ bool gaussCompacto(int n, double a[][MAX], double b[], double x[]) {
          l[i][p] = (a[i][p] - s) / u[p][p];
       }
    }
-   // impMatriz(n, l);
-   // impMatriz(n, u);
-   // impVetoror(n, bL);
-   sistemaTriangularSuperior(n, u, bL, x); //U.x = bL
+
+   sistemaTriangularSuperior(n, u, bL, x);
    return true;
 }
 bool cholesky(int n, double a[][MAX], double b[], double x[]) {
    double l[MAX][MAX], y[MAX], s;
 
    if (!ehSimetrica(n, a) || !ehDefPositiva(n, a))
-      return false; //método não converge
+      return false; //não converge
 
    for (int j = 0; j < n; j++) {
       //calcula o elemento da diagonal
@@ -360,113 +358,146 @@ bool gaussSeidel(int n, double a[][MAX], double b[], double e, double x_ant[], i
 }
 
 int menu() {
-   int op;
-   printf("   Cálculo de sistemas lineares   \n");
-   printf("         e matriz inversa         \n");
-   printf("..................................\n\n");
-   printf("| Determinante:\n");
-   printf("  01 › Laplace\n\n");
-   printf("| Sistema linear:\n");
-   printf("  02 › Triangular Inferior\n");
-   printf("  03 › Triangular Superior\n\n");
-   printf("     Métodos diretos:\n");
-   printf("     04 › Decomposição LU\n");
-   printf("     05 › Cholesky\n");
-   printf("     06 › Gauss Compacto\n");
-   printf("     07 › Gauss Jordan\n\n");
-   printf("     Métodos iterativos:\n");
-   printf("     08 › Jacobi\n");
-   printf("     09 › Gauss Seidel\n\n");
-   printf("| Matriz:\n");
-   printf("  10 › Inversa\n\n");
-   do {
-      printf("Resp.: ");
-      scanf("%d", &op);
-   } while (op < 1 || op > 10);
-   printf("\n");
-   return op;
+   setlocale(LC_ALL, "Portuguese");
+   
+   moveXY (47, 0, "_______________________________________");
+   moveXY (46, 1, "|                                       |");
+   moveXY (44, 2, "  |   Resolução de Sistemas Lineares    |");
+   moveXY (46, 3, "|     e Cálculo de matriz inversa      |");
+   moveXY (46, 4, "|_______________________________________|");
+   moveXY (56, 6, "Calcular Determinante");
+   moveXY (50, 8, "*********************************");
+   moveXY (50, 9, "* ----- Sistemas Lineares ----- *");
+   moveXY (50, 10, "*                               *");
+   moveXY (50, 11, "*      Triangular Inferior      *");
+   moveXY (50, 12, "*      Triangular Superior      *");
+   moveXY (50, 13, "*///////////////////////////////*");
+   moveXY (50, 14, "*   ---- Métodos diretos ----  *");
+   moveXY (50, 15, "*                               *");
+   moveXY (50, 16, "*       Decomposição LU       *");
+   moveXY (50, 17, "*           Cholesky            *");
+   moveXY (50, 18, "*         Gauss Compacto        *");
+   moveXY (50, 19, "*          Gauss Jordan         *");
+   moveXY (50, 20, "*///////////////////////////////*");
+   moveXY (50, 21, "* ---- Métodos iterativos ---- *");
+   moveXY (50, 22, "*            Jacobi             *");
+   moveXY (50, 23, "*         Gauss Seidel          *");
+   moveXY (50, 24, "*********************************");
+   moveXY (59, 26, "Matriz Inversa");
+   moveXY (63, 28, "EXIT");
 }
 
 int main() {
    int op, n, maxIte, ite;
    double a[MAX][MAX], i[MAX][MAX], x[MAX], x0[MAX], b[MAX], e;
-   char r;
+   char r, xd, pronto;
    bool ok;
 
+   moveXY(53,6, "->");
+   
    do {
-      system("clear");
-      op = menu();
-
-      printf("Ordem da matriz: ");
-      scanf("%d", &n);
-      printf("\nCoeficientes da matriz %dx%d:\n", n, n);
-      leMatriz(n, a);
-
-      if (op == 1)
-         printf("\nA solução é: %.4lf\n", determinante(n, a));
-      else if (op >= 2 && op <= 7) {
-         printf("\nTermos independentes:\n");
-         leVetor(n, b);
-
-         switch (op) {
-         case 2:
-            ok = sistemaTriangularInferior(n, a, b, x);
+      menu();
+      moveXY(posX, posY, "->");
+      xd = toupper(getch());
+      
+      switch(xd){
+            case 'H':
+                if (posY > 6){
+                    moveXY(53,posY, "  ");
+                    if (posY == 28){
+                       posY = 26;
+                    }
+                    else if (posY == 26){
+                       posY = 23;
+                    }
+                    else if (posY == 22){
+                       posY = 19;
+                    }
+                    else if (posY == 16){
+                       posY = 12;
+                    }
+                    else if (posY == 11){
+                       posY = 6;
+                    }
+                    else {
+                       posY-=1;
+                    }
+                    moveXY(53,posY, "->");             
+                    
+                }
             break;
-         case 3:
-            ok = sistemaTriangularSuperior(n, a, b, x);
+           
+            case 'P':
+                if (posY < 28){
+                    moveXY(53,posY, "  ");
+                    if (posY == 6){
+                       posY = 11;
+                    }
+                    else if (posY == 12) {
+                       posY = 16;
+                    }
+                    else if (posY == 19){
+                       posY = 22;
+                    }
+                    else if (posY == 23){
+                       posY = 26;
+                    }
+                    else if (posY == 26){
+                       posY = 28;
+                    }
+                    else {
+                       posY+=1;
+                    }
+                    moveXY(53,posY, "->");             
+                }
             break;
-         case 4:
-            ok = decomposicaoLU(n, a, b, x);
+           
+            case 13:
+                if (posY == 6){
+                  system("cls");
+                  moveXY(49,1, ":::::::::Fácil:::::::::: ");
+                  printf("\nOrdem da matriz: ");
+                  scanf("%d", &n);
+                  printf("\nCoeficientes da matriz %dx%d:\n", n, n);
+                  leMatriz(n, a);
+                  printf("\nA solução é: %.4lf\n", determinante(n, a));
+                  do{
+                        pronto = getch();
+                  }while (pronto != 13);
+                  system ("cls");
+                }
+               
+                if (posY == 11){
+                    system("cls");
+                    printf("\nTermos independentes:\n");
+                     leVetor(n, b);
+                    ok = sistemaTriangularInferior(n, a, b, x);
+                    if (ok) {
+                        printf("\nO vetor solução é:\n");
+                        impVetor(n, x);
+                     } else
+                        printf("\nO método não converge!\n");
+                     do{
+                        pronto = getch();
+                     }while (pronto != 13);
+                    system ("cls");              
+                }
+                
+                if (posY == 15){
+                    system("cls");
+                    moveXY(49,1, "TESTE");
+                    
+                    
+                    
+                }
+               
+                if (posY == 28){
+                    system("cls");
+                    exit(0);
+                 }
             break;
-         case 5:
-            ok = cholesky(n, a, b, x);
-            break;
-         case 6:
-            ok = gaussCompacto(n, a, b, x);
-            break;
-         case 7:
-            ok = gaussJordan(n, a, b, x);
-            break;
-         }
-         if (ok) {
-            printf("\nO vetor solução é:\n");
-            impVetor(n, x);
-         } else
-            printf("\nO método não converge!\n");
-      } else if (op == 8 || op == 9) {
-         printf("\nTermos independentes:\n");
-         leVetor(n, b);
-         printf("\nAproximação inicial para o vetor solução:\n");
-         leVetor(n, x0);
-         printf("\nErro: ");
-         scanf("%lf", &e);
-         printf("\nNúmero máximo de iterações: ");
-         scanf("%d", &maxIte);
-
-         if (op == 8)
-            ok = jacobi(n, a, b, e, x0, maxIte, x, &ite);
-         else
-            ok = gaussSeidel(n, a, b, e, x0, maxIte, x, &ite);
-
-         if (ok) {
-            printf("\nO vetor solução é:\n");
-            impVetor(n, x);
-         } else
-            printf("\nO método não converge!\n");
-      } else {
-         ok = matrizInversa(n, a, i);
-         if (ok) {
-            printf("A matriz solução é:\n");
-            impMatriz(n, i);
-         } else
-            printf("\nO método não converge!\n");
-      }
-
-      do {
-         printf("\nRetornar ao menu [s/n]? ");
-         fflush(stdin);
-         scanf(" %c", &r);
-      } while (r != 'n' && r != 's');
-   } while (r == 's');
+        }
+        }while(1);
+   system("pause");
    return 0;
 }
