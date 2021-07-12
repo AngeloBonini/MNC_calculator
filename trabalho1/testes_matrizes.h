@@ -1,5 +1,3 @@
-
-
 #include <math.h>
 #include <stdbool.h>
 #define MAX 100

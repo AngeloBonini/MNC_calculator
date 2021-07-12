@@ -10,7 +10,7 @@
 void printArray(int n, double b[])
 {
    for (int i = 0; i < n; i++)
-      printf("%10.4lf\n", b[i]);
+      printf("\t%10.4lf\n", b[i]);
    printf("\n");
 }
 
@@ -18,8 +18,10 @@ void print2d_array(int n, double a[][MAX])
 {
    for (int i = 0; i < n; i++)
    {
-      for (int j = 0; j < n; j++)
-         printf("%10.4lf ", a[i][j]);
+    for (int j = 0; j < n; j++){
+        printf("\t%10.4lf ", a[i][j]);
+	}
+      	
       printf("\n");
    }
    printf("\n");
@@ -27,15 +29,21 @@ void print2d_array(int n, double a[][MAX])
 
 void readArray(int n, double v[])
 {
-   for (int i = 0; i < n; i++)
-      scanf("%lf", &v[i]);
+   for (int i = 0; i < n; i++){
+   		printf ("\t");
+		scanf("%lf", &v[i]);
+   }
+      
 }
 
 void read2d_array(int n, double a[][MAX])
 {
    for (int i = 0; i < n; i++)
-      for (int j = 0; j < n; j++)
-         scanf("%lf", &a[i][j]);
+      for (int j = 0; j < n; j++){
+      	printf ("\tElemento[%d][%d]: ", i, j);
+        scanf("%lf", &a[i][j]);
+	  }
+    	
 }
 
 void copy2d_Array(int ordem, double a[][MAX], double copia[][MAX])
